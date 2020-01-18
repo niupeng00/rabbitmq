@@ -17,21 +17,18 @@ import java.util.concurrent.TimeoutException;
 public class Send {
     private static final String QUEUE_NAME = "test_work_queue";
 
-    public Send() {
-    }
-
     public static void main(String[] args) throws IOException, TimeoutException, InterruptedException {
         Connection connection = ConnectionUtils.getConnection();
         Channel channel = connection.createChannel();
         boolean durable = false;
-        channel.queueDeclare("test_work_queue", durable, false, false, (Map)null);
+        channel.queueDeclare(QUEUE_NAME, durable, false, false, (Map)null);
         int prefetchCount = 1;
         channel.basicQos(prefetchCount);
 
         for(int i = 0; i < 50; ++i) {
             String msg = "hello " + i;
             System.out.println("[WQ]：send：" + msg);
-            channel.basicPublish("", "test_work_queue", (BasicProperties)null, msg.getBytes());
+            channel.basicPublish("", QUEUE_NAME, (BasicProperties)null, msg.getBytes());
             Thread.sleep(20L);
         }
 

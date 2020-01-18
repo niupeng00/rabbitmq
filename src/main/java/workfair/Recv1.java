@@ -23,7 +23,7 @@ public class Recv1 {
     public static void main(String[] args) throws IOException, TimeoutException {
         Connection connection = ConnectionUtils.getConnection();
         final Channel channel = connection.createChannel();
-        channel.queueDeclare("test_work_queue", false, false, false, (Map)null);
+        channel.queueDeclare(QUEUE_NAME, false, false, false, (Map)null);
         channel.basicQos(1);
         Consumer consumer = new DefaultConsumer(channel) {
             public void handleDelivery(String consumerTag, Envelope envelope, BasicProperties properties, byte[] body) throws IOException {
@@ -42,6 +42,6 @@ public class Recv1 {
             }
         };
         boolean autoAck = false;
-        channel.basicConsume("test_work_queue", autoAck, consumer);
+        channel.basicConsume(QUEUE_NAME, autoAck, consumer);
     }
 }
